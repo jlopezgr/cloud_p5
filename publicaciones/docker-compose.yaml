@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  post:
+    container_name: post
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 8000:5000
+    volumes:
+      - ./:/usr/src/app
+    env_file: ./.env
+    depends_on:
+      - post-database
+    networks:
+      - posts
+
+  post-database:
+    container_name: post-database
+    image: postgres:15
+    restart: always
+    ports:
+      - 5430:5432
+    env_file: ./.env
+    volumes:
+      - post-database-data:/var/lib/postgresql/data
+    networks:
+      - posts
+
+volumes:
+  post-database-data:
+
+networks:
+  posts:
+
